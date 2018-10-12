@@ -1,25 +1,40 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import GenerateSimpson from './GenerateSimpson';
+import DisplaySimpson from './DisplaySimpson'
 import './App.css';
 
+
+
 class App extends Component {
+
+  state = {
+    simpson: null
+  }
+  
+  getData() {
+    fetch("https://thesimpsonsquoteapi.glitch.me/quotes?count=num")
+    .then(response => response.json())
+    .then(data => this.setState({ simpson: data[0] }))
+    .then(() => console.log(this.state.simpson))
+  }
+
+  componentDidMount() {
+    this.getData()
+  }
+
+  handleClick() {
+    this.getData()
+  }
+
   render() {
+    if (this.state.simpson === null) {
+    return <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="loading"/>}
+    
+    
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>     
+        <DisplaySimpson simpson = {this.state.simpson} />
+        <GenerateSimpson selectQuote = {() => this.handleClick()} />
       </div>
     );
   }
